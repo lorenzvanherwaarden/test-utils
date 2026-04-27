@@ -1,3 +1,4 @@
+import { Fragment, type VNode } from 'vue'
 import { config } from './config'
 import BaseWrapper from './baseWrapper'
 import WrapperLike from './interfaces/wrapperLike'
@@ -21,6 +22,12 @@ export class DOMWrapper<NodeType extends Node> extends BaseWrapper<NodeType> {
   }
 
   getRootNodes() {
+    if (
+      this.subTree?.type === Fragment &&
+      Array.isArray(this.subTree?.children)
+    ) {
+      return this.subTree.children.map(node => (node as any)?.el)
+    }
     return [this.wrapperElement]
   }
 
